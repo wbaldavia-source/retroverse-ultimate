@@ -1,0 +1,10 @@
+{
+  "name": "RetroVerse — Ultimate Emulator",
+  "short_name": "RetroVerse",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090b11",
+  "theme_color": "#090b11",
+  "description": "Jogue no navegador os jogos clássicos que você tem direito de usar.",
+  "icons": []
+}
