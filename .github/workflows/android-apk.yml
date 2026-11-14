@@ -1,0 +1,53 @@
+
+name: Build RetroVerse Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Extrair projeto
+        run: |
+          unzip RetroVerse_Android_0.3.0.zip -d buildsrc
+
+      - name: Instalar dependencias
+        working-directory: buildsrc/RetroVerse_0.3.0
+        run: npm install
+
+      - name: Preparar Android
+        working-directory: buildsrc/RetroVerse_0.3.0
+        run: |
+          npx cap add android
+          npx cap sync android
+
+      - name: Compilar APK
+        working-directory: buildsrc/RetroVerse_0.3.0/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Disponibilizar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: RetroVerse-debug-apk
+          path: buildsrc/RetroVerse_0.3.0/android/app/build/outputs/apk/debug/app-debug.apk
